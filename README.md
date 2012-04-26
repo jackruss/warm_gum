@@ -1,0 +1,169 @@
+# Warm Gum
+
+## External Data Requirements
+
+A Warm Gum instance requires the following information from the application with which it integrates:
+
+### Logged in User
+
+#### Structure
+
+    {
+      "user": {
+        "id": 1,
+        "first_name": "Terrible Terry",
+        "last_name": "Tate",
+        "metadata": {}
+      }
+    }
+
+#### API Exposure
+
+return the JSON representation of the currently logged in user
+
+    GET /user
+
+## Message Record JSON Structure
+
+    {
+      "message": {
+        "id": 1234,
+        "sent_at": "2012/04/23",
+        "subject": "Get ready for messaging v2",
+        "from": 2,
+        "body": "this is a hot body.",
+        "metadata": {}
+      }
+    }
+
+## Routes
+
+### Create a message
+
+POST `/`
+
+#### Required arguments
+
+* `subject`
+* `body`
+* `to`
+
+#### Optional arguments
+
+* `metadata`
+
+#### Derived values
+
+* `from` - `current_user.id` in the session
+* `sent_at` - generated before save
+
+        {
+          "message": {
+            "subject": "stuff subject",
+            "body": "cold body",
+            "to": 1,
+            "metadata": {}
+          }
+        }
+
+#### Behavior
+
+A new message is created with the required arguments, optional arguments
+and derived values set appropriately, all metadata is stored as is.
+
+#### Response
+
+* 403 - not authorized  
+  body: <blank>  
+* 200 - authorized and message was created, body: entire preprocessed JSON
+message  
+  body: entire message json object
+
+### List all messages (paginated)
+
+GET `/`
+
+#### Behavior
+
+All messages where current user is included in one of the following:
+
+* `to`
+* `from`
+
+#### Required arguments
+
+None
+
+#### Response
+
+* 403 - not authorized  
+  body: <blank>  
+* 200 - authorized  
+  body:
+
+        {
+          "messages": [
+          ],
+          "current_page": 1,
+          "per_page": 20,
+          "message_count": 21,
+        }
+
+### Retrieve a message
+
+GET `/:id`
+
+#### Required arguments
+
+* `id`
+
+#### Response
+
+* 403 - not authorized  
+  body: <blank>  
+* 200 - authorized  
+  body: entire message json object
+
+#### Authorization
+
+Current user must be included in one of the following:
+
+* `to`
+* `from`
+
+### Sent messages (paginated)
+
+GET `/sent`
+
+#### Behavior
+
+All messages where `from` matches the current user's id
+
+#### Required arguments
+
+None
+
+#### Response
+
+* 403 - not authorized  
+  body: <blank>  
+* 200 - authorized  
+  body:
+
+        {
+          "messages": [
+          ],
+          "current_page": 1,
+          "per_page": 20,
+          "message_count": 21,
+        }
+
+## Filters
+
+Each defined route in warm gum shall have the following
+(callbacks|filters):
+
+* before - ex. useful to modify the query that is performed to retrieve
+  a resource
+* after - ex. useful to modify the message JSON structure as
+  authorization and business logic dictate
