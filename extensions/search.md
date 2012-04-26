@@ -1,21 +1,15 @@
-## Search
+# Search
 
-### Routes
+## Routes
 
-#### Search (paginated)
-
-GET `/search/:term`
-
-##### Behavior
+### Search (paginated)
 
 Return a paginated list of messages accessible by the current user for
 which the subject or body contains the search term
 
-##### Required arguments
+    GET /search/:term
 
-None
-
-##### Response
+#### Response
 
 * 403 - not authorized  
   body: <blank>  

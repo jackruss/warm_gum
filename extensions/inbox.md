@@ -14,15 +14,9 @@
 
 #### Inbox (paginated)
 
-GET `/inbox`
+return a paginated list of unarchived messages
 
-##### Behavior
-
-All messages where `to` matches the current user's id
-
-##### Required arguments
-
-None
+    GET /inbox
 
 ##### Response
 
@@ -41,9 +35,13 @@ None
 
 ### Archive
 
-PUT `/archive`
+archive the message referred to by `:id`, (add the user's id to the
+metadata.participation.archived list)
+
+    PUT /archive/:id
 
 ### Archived
 
-GET `/archived`
+return a paginated list of archived messages
 
+    GET /archived

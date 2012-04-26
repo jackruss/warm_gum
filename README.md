@@ -4,25 +4,6 @@
 
 A Warm Gum instance requires the following information from the application with which it integrates:
 
-### Logged in User
-
-#### Structure
-
-    {
-      "user": {
-        "id": 1,
-        "first_name": "Terrible Terry",
-        "last_name": "Tate",
-        "metadata": {}
-      }
-    }
-
-#### API Exposure
-
-return the JSON representation of the currently logged in user
-
-    GET /user
-
 ## Message Record JSON Structure
 
     {
@@ -38,9 +19,29 @@ return the JSON representation of the currently logged in user
 
 ## Routes
 
+### Current User
+
+return the JSON representation of the currently logged in user
+
+    GET /user
+
+#### Structure
+
+    {
+      "user": {
+        "id": 1,
+        "first_name": "Terrible Terry",
+        "last_name": "Tate",
+        "metadata": {}
+      }
+    }
+
 ### Create a message
 
-POST `/`
+create a new message with the required arguments, optional arguments
+and derived values set appropriately, all metadata is stored as is.
+
+    POST /
 
 #### Required arguments
 
@@ -66,11 +67,6 @@ POST `/`
           }
         }
 
-#### Behavior
-
-A new message is created with the required arguments, optional arguments
-and derived values set appropriately, all metadata is stored as is.
-
 #### Response
 
 * 403 - not authorized  
@@ -81,14 +77,12 @@ message
 
 ### List all messages (paginated)
 
-GET `/`
-
-#### Behavior
-
 All messages where current user is included in one of the following:
 
 * `to`
 * `from`
+
+    GET /
 
 #### Required arguments
 
@@ -133,15 +127,9 @@ Current user must be included in one of the following:
 
 ### Sent messages (paginated)
 
-GET `/sent`
-
-#### Behavior
-
 All messages where `from` matches the current user's id
 
-#### Required arguments
-
-None
+    GET /sent
 
 #### Response
 

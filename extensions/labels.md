@@ -3,8 +3,10 @@
 ### Metadata
 
     {
-      "metadata": {
-        "labels": []
+      "message" : {
+        "metadata": {
+          "labels": []
+        }
       }
     }
 
@@ -12,15 +14,9 @@
 
 #### Messages by label (paginated)
 
-GET `/label/:label`
+return a paginated list of messages labeled with `:label`
 
-##### Behavior
-
-All messages containing the label `:label` for the current user
-
-##### Required arguments
-
-None
+    GET /label/:label
 
 ##### Response
 

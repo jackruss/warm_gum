@@ -3,9 +3,11 @@
 ### Metadata
 
     {
-      "metadata": {
-        "participation": {
-          "read": [4,1,6],
+      "message" {
+        "metadata": {
+          "participation": {
+            "read": [4,1,6],
+          }
         }
       }
     }
@@ -14,7 +16,10 @@
 
 #### Mark a message as read
 
-PUT `/:id`
+mar a message read (add the user's id to the message.participation.read
+list)
+
+    PUT /:id
 
 ##### Required arguments
 
@@ -26,9 +31,3 @@ PUT `/:id`
   body: <blank>  
 * 200 - authorized  
   body: entire message json object
-
-##### Authorization
-
-Current user must be included in one of the following:
-
-* `to`

@@ -2,17 +2,6 @@
 
 Allow Warm Gum users to send messages to individuals.
 
-## Participant Record JSON Structure
-
-    {
-      "user": {
-        "id": 1,
-        "first_name": "Terrible Terry",
-        "last_name": "Tate",
-        "metadata": {}
-      }
-    }
-
 ## Extended Message Metadata
 
     {

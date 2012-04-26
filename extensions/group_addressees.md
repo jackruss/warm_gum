@@ -71,9 +71,6 @@ return all groups for `:type` containing `:term` in the title
 
     GET/group/:type/:term
 
-
-
-
 ## Group Metadata for a User
 
 a an example User record follows:

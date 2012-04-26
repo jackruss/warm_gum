@@ -14,13 +14,19 @@
 
 #### Acknowledged
 
-GET `/acknowledged`
+return all acknowledged messages
 
-#### Acknowledge
-
-PUT `/acknowledge`
+    GET /acknowledged
 
 #### Unacknowledged
 
-GET `/unacknowledged`
+return all unacknowledged messages
 
+    GET /unacknowledged
+
+#### Acknowledge
+
+acknowledge a message (adds the user's id to
+metadata.participation.acknowledged)
+
+    PUT /acknowledge
