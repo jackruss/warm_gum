@@ -6,14 +6,7 @@ module Sinatra
     module Base
       def self.registered(app)
         app.get '/user' do
-          json({
-            :user => {
-              :id => 1,
-              :first_name => "Terrible Terry",
-              :last_name => "Tate",
-              :metadata => {}
-            }
-          })
+          json User.find(@current_user_id)
         end
 
         app.get '/messages/:id' do
