@@ -1,8 +1,13 @@
-require 'sinatra/extension'
+require 'sinatra/base'
 
-module WarmGum
-  module Labels
-    extend Sinatra::Extension
-
+module Sinatra
+  module WarmGum
+    module Labels
+      def self.registered(app)
+        #put actions here
+      end
+    end
   end
+
+  register WarmGum::Labels
 end

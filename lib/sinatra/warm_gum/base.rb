@@ -1,12 +1,14 @@
 require 'sinatra/base'
+require 'sinatra/json'
 
 module Sinatra
   module WarmGum
     module Base
       def self.registered(app)
-        puts app.inspect
+        app.get '/:id' do
+          json :id => 1
+        end
       end
-
     end
   end
 

@@ -1,8 +1,13 @@
-require 'sinatra/extension'
+require 'sinatra/base'
 
-module WarmGum
-  module Search
-    extend Sinatra::Extension
-
+module Sinatra
+  module WarmGum
+    module Search
+      def self.registered(app)
+        #put actions here
+      end
+    end
   end
+
+  register WarmGum::Search
 end

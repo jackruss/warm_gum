@@ -4,7 +4,7 @@ module Sinatra
   module WarmGum
     module Acknowledgement
       def self.registered(app)
-        puts app.inspect
+        #put actions here
       end
     end
   end

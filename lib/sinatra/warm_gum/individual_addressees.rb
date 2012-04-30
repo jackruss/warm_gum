@@ -1,8 +1,13 @@
-require 'sinatra/extension'
+require 'sinatra/base'
 
-module WarmGum
-  module IndividualAddressees
-    extend Sinatra::Extension
-
+module Sinatra
+  module WarmGum
+    module IndividualAddressees
+      def self.registered(app)
+        #put actions here
+      end
+    end
   end
+
+  register WarmGum::IndividualAddressees
 end
