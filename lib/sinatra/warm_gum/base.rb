@@ -17,21 +17,19 @@ module Sinatra
         end
 
         app.get '/messages' do
-          json Message.all(@authenticated_user)
+          json Message.by_user(@authenticated_user[:id])
         end
 
         app.post '/messages' do
-          message = params[:message]
-          message.select { |attr, val| WRITEABLE_MESSAGE_ATTRIBUTES.include?(attr) }
+          message = params[:message].select { |attr, val| WRITEABLE_MESSAGE_ATTRIBUTES.include?(attr.to_sym) }
           message[:from] = @authenticated_user[:id]
-          message[:sent_at] = Time.now
-          message[:metadata] = {}
           json Message.create(message)
         end
 
         app.get '/sent' do
-          json Message.sent(@authenticated_user)
+          json Message.by_from(:from => @authenticated_user[:id])
         end
+
       end
     end
   end
