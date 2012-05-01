@@ -6,7 +6,7 @@ module Sinatra
     module Base
       def self.registered(app)
         app.get '/user' do
-          json User.find(@current_user_id)
+          json @authenticated_user
         end
 
         app.get '/messages/:id' do
