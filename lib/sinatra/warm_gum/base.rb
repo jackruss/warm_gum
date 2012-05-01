@@ -4,7 +4,10 @@ require 'sinatra/json'
 module Sinatra
   module WarmGum
     module Base
+      WRITEABLE_MESSAGE_ATTRIBUTES = [:subject, :body]
+
       def self.registered(app)
+
         app.get '/user' do
           json @authenticated_user
         end
@@ -14,33 +17,20 @@ module Sinatra
         end
 
         app.get '/messages' do
-          json([{
-            :message => {
-              :id => 1234,
-              :sent_at => "2012/04/23",
-              :subject => "Get ready for messaging v2",
-              :from => 2,
-              :body => "this is a hot body.",
-              :metadata => {}
-            }
-          }])
+          json Message.all(@authenticated_user)
         end
 
         app.post '/messages' do
-          json Message.create!(params[:message])
+          message = params[:message]
+          message.select { |attr, val| WRITEABLE_MESSAGE_ATTRIBUTES.include?(attr) }
+          message[:from] = @authenticated_user[:id]
+          message[:sent_at] = Time.now
+          message[:metadata] = {}
+          json Message.create(message)
         end
 
         app.get '/sent' do
-          json([{
-            :message => {
-              :id => 1234,
-              :sent_at => "2012/04/23",
-              :subject => "Get ready for messaging v2",
-              :from => 2,
-              :body => "this is a hot body.",
-              :metadata => {}
-            }
-          }])
+          json Message.sent(@authenticated_user)
         end
       end
     end
