@@ -4,7 +4,21 @@ module Sinatra
   module WarmGum
     module Read
       def self.registered(app)
-        #put actions here
+
+        app.put '/messages/:id/read' do
+          message = Message.find(:id)
+          if message
+            message.read!(@authenticated_user[:id])
+          else
+            status 404
+            body 'Message not found'
+          end
+        end
+
+        app.get '/messages/read' do
+          Message.read(@authenticated_user[:id])
+        end
+
       end
     end
   end
