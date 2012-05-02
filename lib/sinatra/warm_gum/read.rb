@@ -6,7 +6,7 @@ module Sinatra
       def self.registered(app)
 
         app.put '/messages/:id/read' do
-          message = Message.find(:id)
+          message = Message.find(params[:id])
           if message
             message.read!(@authenticated_user[:id])
           else

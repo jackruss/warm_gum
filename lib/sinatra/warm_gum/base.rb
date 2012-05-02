@@ -23,7 +23,7 @@ module Sinatra
         app.post '/messages' do
           message = params[:message].select { |attr, val| WRITEABLE_MESSAGE_ATTRIBUTES.include?(attr.to_sym) }
           message[:from] = @authenticated_user[:id]
-          json Message.create(message)
+          json Message.create_with_metadata(message)
         end
 
         app.get '/sent' do
