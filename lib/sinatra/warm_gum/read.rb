@@ -16,7 +16,7 @@ module Sinatra
         end
 
         app.get '/messages/read' do
-          Message.read(@authenticated_user[:id])
+          Message.read_by_user(@authenticated_user[:id])
         end
 
       end

@@ -27,7 +27,7 @@ module Sinatra
         end
 
         app.get '/sent' do
-          json Message.by_from(:from => @authenticated_user[:id])
+          json Message.sent_by_user(@authenticated_user[:id])
         end
 
       end
