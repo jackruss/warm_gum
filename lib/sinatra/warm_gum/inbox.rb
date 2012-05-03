@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'sinatra/json'
 
 module Sinatra
   module WarmGum
@@ -6,16 +7,17 @@ module Sinatra
       def self.registered(app)
 
         app.get '/inbox' do
-          Message.inbox(@authenticated_user[:id])
+          json Message.inbox(@authenticated_user[:id])
         end
 
         app.get '/archived' do
-          Message.archived_by_user(@authenticated_user[:id])
+          json Message.archived_by_user(@authenticated_user[:id])
         end
 
         app.put '/messages/:id/archive' do
           message = Message.find(params[:id])
           message.archive!(@authenticated_user[:id])
+          json message
         end
 
       end
