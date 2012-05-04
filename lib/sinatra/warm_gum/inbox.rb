@@ -4,7 +4,11 @@ require 'sinatra/json'
 module Sinatra
   module WarmGum
     module Inbox
+      EXTENSION_METADATA = { :participation => { :archived => [] } }
+
       def self.registered(app)
+
+        ::Message.register_extension_metadata(EXTENSION_METADATA) if defined?(Message)
 
         app.get '/inbox' do
           json Message.inbox(@authenticated_user[:id])
