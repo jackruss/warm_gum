@@ -30,6 +30,19 @@ module Sinatra
           json Message.sent_by_user(@authenticated_user[:id])
         end
 
+        app.get '/drafts' do
+          json Message.by_state('draft')
+        end
+
+        app.put '/messages/:id/deliver' do
+          message = Message.find(params[:id])
+          if message.delivered?
+            halt
+          else
+            message.deliver
+          end
+        end
+
       end
     end
   end
