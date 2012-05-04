@@ -3,7 +3,11 @@ require 'sinatra/base'
 module Sinatra
   module WarmGum
     module Read
+      EXTENSION_METADATA = { :participation => { :read => [] } }
+
       def self.registered(app)
+
+        ::Message.register_extension_metadata(EXTENSION_METADATA) if defined?(Message)
 
         app.put '/messages/:id/read' do
           message = Message.find(params[:id])
