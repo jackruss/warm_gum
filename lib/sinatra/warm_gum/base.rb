@@ -4,7 +4,6 @@ require 'sinatra/json'
 module Sinatra
   module WarmGum
     module Base
-      WRITEABLE_MESSAGE_ATTRIBUTES = [:subject, :body]
 
       def self.registered(app)
 
@@ -13,7 +12,12 @@ module Sinatra
         end
 
         app.get '/messages/:id' do
-          json Message.find(params[:id])
+          @message = Message.find(params[:id])
+          if can_read?(@authenticated_user, @message)
+            json @message
+          else
+            halt 403, 'Forbidden'
+          end
         end
 
         app.get '/messages' do
@@ -21,9 +25,14 @@ module Sinatra
         end
 
         app.post '/messages' do
-          message = params[:message].select { |attr, val| WRITEABLE_MESSAGE_ATTRIBUTES.include?(attr.to_sym) }
-          message[:from] = @authenticated_user[:id]
-          json Message.create_with_metadata(message)
+          halt 400, 'message parameter required' unless params.has_key?('message')
+          message = Message.new(params['message'])
+          message.from = @authenticated_user.id
+          if message.save
+            json message
+          else
+            halt 400, 'subject is required'
+          end
         end
 
         app.get '/sent' do
