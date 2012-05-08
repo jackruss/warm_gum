@@ -7,7 +7,10 @@ module Sinatra
 
       def self.registered(app)
 
-        ::Message.register_extension_metadata(EXTENSION_METADATA) if defined?(Message)
+        Message.register_extension_metadata(EXTENSION_METADATA)
+        Message.metadata_transform do |options|
+          @json_extensions.merge!('read' => read?(options[:user_id]))
+        end
 
         app.put '/messages/:id/read' do
           message = Message.find(params[:id])
@@ -26,6 +29,4 @@ module Sinatra
       end
     end
   end
-
-  register WarmGum::Read
 end
