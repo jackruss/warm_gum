@@ -8,28 +8,28 @@ module Sinatra
       def self.registered(app)
 
         app.get '/user' do
-          json @authenticated_user
+          json @authenticated_user.as_json
         end
 
         app.get '/messages/:id' do
           @message = Message.find(params[:id])
           if can_read?(@authenticated_user, @message)
-            json @message
+            json @message.as_json
           else
             halt 403, 'Forbidden'
           end
         end
 
         app.get '/messages' do
-          json Message.by_user(@authenticated_user[:id])
+          json Message.by_user(@authenticated_user[:id]).as_json
         end
 
         app.post '/messages' do
           halt 400, 'message parameter required' unless params.has_key?('message')
-          message = Message.new(params['message'])
-          message.from = @authenticated_user.id
+          @message = Message.new(params['message'])
+          @message.from = @authenticated_user.id
           if message.save
-            json message
+            json @message.as_json
           else
             halt 400, 'subject is required'
           end
@@ -44,11 +44,11 @@ module Sinatra
         end
 
         app.put '/messages/:id/deliver' do
-          message = Message.find(params[:id])
-          if message.delivered?
+          @message = Message.find(params[:id])
+          if @message.delivered?
             halt
           else
-            message.deliver
+            @message.deliver
           end
         end
 
