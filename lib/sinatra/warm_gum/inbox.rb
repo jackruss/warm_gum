@@ -8,7 +8,7 @@ module Sinatra
 
       def self.registered(app)
 
-        ::Message.register_extension_metadata(EXTENSION_METADATA) if defined?(Message)
+        Message.register_extension_metadata(EXTENSION_METADATA)
 
         app.get '/inbox' do
           json Message.inbox(@authenticated_user[:id])
@@ -27,6 +27,4 @@ module Sinatra
       end
     end
   end
-
-  register WarmGum::Inbox
 end

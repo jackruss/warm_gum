@@ -11,8 +11,8 @@ module Sinatra
       end
 
       module ClassMethods
-        def register_extension_metadata(extension_metadata)
-          @extension_metadata.merge!(extension_metadata)
+        def register_extension_metadata(metadata_default)
+          @extension_metadata.deep_merge!(metadata_default)
         end
 
         def metadata_transform(&transform)
