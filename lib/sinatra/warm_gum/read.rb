@@ -25,7 +25,7 @@ module Sinatra
 
         app.get '/messages/read' do
           @messages = Message.read_by_user(@authenticated_user.id)
-          json @messages
+          json @messages.as_json
         end
 
       end

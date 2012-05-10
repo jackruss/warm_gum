@@ -18,7 +18,7 @@ module Sinatra
 
         app.get '/messages' do
           @messages = Message.all_for_user(@authenticated_user.id)
-          json @messages
+          json @messages.as_json
         end
 
         app.post '/messages' do
@@ -33,11 +33,13 @@ module Sinatra
         end
 
         app.get '/sent' do
-          json Message.sent_by_user(@authenticated_user[:id])
+          @messages = Message.sent_by_user(@authenticated_user[:id])
+          json @messages.as_json
         end
 
         app.get '/drafts' do
-          json Message.by_state('draft')
+          @messages = Message.by_state('draft')
+          json @messages.as_json
         end
 
         app.put '/messages/:id/deliver' do
@@ -46,6 +48,7 @@ module Sinatra
             halt
           else
             @message.deliver
+            json @message.as_json
           end
         end
 

@@ -12,18 +12,18 @@ module Sinatra
 
         app.get '/inbox' do
           @messages = Message.inbox(@authenticated_user[:id])
-          json @messages
+          json @messages.as_json
         end
 
         app.get '/messages/archived' do
           @messages = Message.archived_by_user(@authenticated_user[:id])
-          json @messages
+          json @messages.as_json
         end
 
         app.put %r{^/messages/#{ID_FORMAT}/archive$} do
           @message = Message.find(params[:id])
           @message.archive!(@authenticated_user[:id])
-          json @message
+          json @message.as_json
         end
 
       end
