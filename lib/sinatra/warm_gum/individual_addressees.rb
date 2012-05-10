@@ -3,30 +3,25 @@ require 'sinatra/base'
 module Sinatra
   module WarmGum
     module IndividualAddressees
-      EXTENSION_METADATA = { :addressees => { :individual => [] } }
+      EXTENSION_METADATA = { 'addressees' => { 'individual' => [] } }
 
       def self.registered(app)
 
         Message.register_extension_metadata(EXTENSION_METADATA)
-        Message.metadata_transform do
-          json_extensions.merge!(:individual_addressees => message.metadata.addressees.individual)
+        Message.metadata_transform do |options|
+          @json_extensions.merge!('individual_addressees' => self.metadata['addressees']['individual'])
         end
 
-        app.get '/messages/:id/addressees/individuals' do
-          message = Message.find(params[:id])
-          json User.find(message.individual_addressess)
+        app.put %r{^/messages/#{ID_FORMAT}/addressees/individual/(\d+)$} do |message_id, individual_addressee_id|
+          @message = Message.find(message_id)
+          @message.add_individual_addressee(individual_addressee_id)
+          json @message.as_json
         end
 
-        app.post '/messages/:id/addressees/individuals' do
-          message = Message.find(params[:id])
-          message.add_individual_addressee(params[:individual_addressee])
-          json message
-        end
-
-        app.delete '/messages/:id/addressees/individuals/:individual_addressee_id' do
-          message = Message.find(params[:id])
-          message.add_individual_addressee(params[:individual_addressee])
-          json message
+        app.delete %r{^/messages/#{ID_FORMAT}/addressees/individual/(\d+)$} do |message_id, individual_addressee_id|
+          @message = Message.find(message_id)
+          @message.remove_individual_addressee(individual_addressee_id)
+          json @message.as_json
         end
 
       end
