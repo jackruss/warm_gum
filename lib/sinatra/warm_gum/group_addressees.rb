@@ -13,7 +13,7 @@ module Sinatra
           @json_extensions.merge!('group_addressees' => self.metadata['addressees']['group'])
         end
 
-        app.put %r{^/messages/#{ID_FORMAT}/addressees/group/(#{GROUPS.join('|')})/(\d+)$} do |message_id, group, group_addressee_id|
+        app.put %r{^/messages/(#{ID_FORMAT})/addressees/group/(#{GROUPS.join('|')})/(\d+)$} do |message_id, group, group_addressee_id|
           if can_read_group?(group, group_addressee_id)
             @message = Message.find(message_id)
             @message.add_group_addressee(group, group_addressee_id)
@@ -23,7 +23,7 @@ module Sinatra
           end
         end
 
-        app.delete %r{^/messages/#{ID_FORMAT}/addressees/group/(#{GROUPS.join('|')})/(\d+)$} do |message_id, group, group_addressee_id|
+        app.delete %r{^/messages/(#{ID_FORMAT})/addressees/group/(#{GROUPS.join('|')})/(\d+)$} do |message_id, group, group_addressee_id|
           if can_read_group?(group, group_addressee_id)
             @message = Message.find(message_id)
             @message.remove_group_addressee(group, group_addressee_id)

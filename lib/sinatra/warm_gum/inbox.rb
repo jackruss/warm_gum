@@ -20,9 +20,9 @@ module Sinatra
           json @messages.as_json
         end
 
-        app.put %r{^/messages/#{ID_FORMAT}/archive$} do
-          @message = Message.find(params[:id])
-          @message.archive!(@authenticated_user[:id])
+        app.put %r{^/messages/(#{ID_FORMAT})/archive$} do |message_id|
+          @message = Message.find(message_id)
+          @message.archive!(@authenticated_user.id)
           json @message.as_json
         end
 

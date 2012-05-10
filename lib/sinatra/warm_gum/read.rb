@@ -12,7 +12,7 @@ module Sinatra
           @json_extensions.merge!('read' => read?(options[:user_id]))
         end
 
-        app.put %r{^/messages/#{ID_FORMAT}/read$} do |message_id|
+        app.put %r{^/messages/(#{ID_FORMAT})/read$} do |message_id|
           @message = Message.find(message_id)
           if @message
             @message.read!(@authenticated_user.id)

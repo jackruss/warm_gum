@@ -11,8 +11,8 @@ module Sinatra
           json @authenticated_user.as_json
         end
 
-        app.get %r{^/messages/#{ID_FORMAT}$} do
-          @message = Message.find(params[:id])
+        app.get %r{^/messages/(#{ID_FORMAT})$} do |message_id|
+          @message = Message.find(message_id)
           json @message.as_json
         end
 
