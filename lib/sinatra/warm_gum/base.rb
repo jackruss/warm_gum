@@ -11,24 +11,21 @@ module Sinatra
           json @authenticated_user.as_json
         end
 
-        app.get '/messages/:id' do
+        app.get %r{^/messages/#{ID_FORMAT}$} do
           @message = Message.find(params[:id])
-          if can_read?(@authenticated_user, @message)
-            json @message.as_json
-          else
-            halt 403, 'Forbidden'
-          end
+          json @message.as_json
         end
 
         app.get '/messages' do
-          json Message.by_user(@authenticated_user[:id]).as_json
+          @messages = Message.all_for_user(@authenticated_user.id)
+          json @messages
         end
 
         app.post '/messages' do
           halt 400, 'message parameter required' unless params.has_key?('message')
           @message = Message.new(params['message'])
           @message.from = @authenticated_user.id
-          if message.save
+          if @message.save
             json @message.as_json
           else
             halt 400, 'subject is required'
@@ -53,8 +50,7 @@ module Sinatra
         end
 
       end
+
     end
   end
-
-  register WarmGum::Base
 end
