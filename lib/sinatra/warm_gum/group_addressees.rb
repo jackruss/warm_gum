@@ -14,15 +14,23 @@ module Sinatra
         end
 
         app.put %r{^/messages/#{ID_FORMAT}/addressees/group/(#{GROUPS.join('|')})/(\d+)$} do |message_id, group, group_addressee_id|
-          @message = Message.find(message_id)
-          @message.add_group_addressee(group, group_addressee_id)
-          json @message.as_json
+          if can_read_group?(@authenticated_user, group, group_addressee_id)
+            @message = Message.find(message_id)
+            @message.add_group_addressee(group, group_addressee_id)
+            json @message.as_json
+          else
+            halt 403, 'Forbidden'
+          end
         end
 
         app.delete %r{^/messages/#{ID_FORMAT}/addressees/group/(#{GROUPS.join('|')})/(\d+)$} do |message_id, group, group_addressee_id|
-          @message = Message.find(message_id)
-          @message.remove_group_addressee(group, group_addressee_id)
-          json @message.as_json
+          if can_read_group?(@authenticated_user, group, group_addressee_id)
+            @message = Message.find(message_id)
+            @message.remove_group_addressee(group, group_addressee_id)
+            json @message.as_json
+          else
+            halt 403, 'Forbidden'
+          end
         end
 
       end
