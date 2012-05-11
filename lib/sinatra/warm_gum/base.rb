@@ -13,12 +13,12 @@ module Sinatra
 
         app.get %r{^/messages/(#{ID_FORMAT})$} do |message_id|
           @message = Message.find(message_id)
-          json @message.as_json
+          message_json @message
         end
 
         app.get '/messages' do
           @messages = Message.all_for_user(@authenticated_user.id)
-          json @messages.as_json
+          message_json @messages
         end
 
         app.post '/messages' do
@@ -26,7 +26,7 @@ module Sinatra
           @message = Message.new(params['message'])
           @message.from = @authenticated_user.id
           if @message.save
-            json @message.as_json
+            message_json @message
           else
             halt 400, 'subject is required'
           end
@@ -34,12 +34,12 @@ module Sinatra
 
         app.get '/sent' do
           @messages = Message.sent_by_user(@authenticated_user[:id])
-          json @messages.as_json
+          message_json @messages
         end
 
         app.get '/drafts' do
           @messages = Message.by_state('draft')
-          json @messages.as_json
+          message_json @messages
         end
 
         app.put '/messages/:id/deliver' do
@@ -48,7 +48,7 @@ module Sinatra
             halt
           else
             @message.deliver
-            json @message.as_json
+            message_json @message
           end
         end
 
