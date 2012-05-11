@@ -10,7 +10,7 @@ module Sinatra
 
         Message.register_extension_metadata(extension_metadata)
         Message.metadata_transform do |options|
-          @json_extensions.merge!('group_addressees' => self.metadata['addressees']['group'])
+          @json_extensions.merge!('group_addressees' => group_addressees)
         end
 
         app.put %r{^/messages/(#{ID_FORMAT})/addressees/group/(#{GROUPS.join('|')})/(\d+)$} do |message_id, group, group_addressee_id|
