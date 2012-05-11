@@ -9,6 +9,9 @@ module Sinatra
       def self.registered(app)
 
         Message.register_extension_metadata(EXTENSION_METADATA)
+        Message.metadata_transform do |options|
+          @json_extensions.merge!('archived' => archived?(options[:user_id]))
+        end
 
         app.get '/inbox' do
           @messages = Message.inbox(@authenticated_user[:id])
