@@ -1,10 +1,18 @@
 module Sinatra
   module WarmGum
     module ExtensionMetadata
+
+      def set_default_metadata
+        self.metadata = Message.extension_metadata
+      end
+
       def self.included(base)
         class << base
-          attr_reader :extension_metadata, :metadata_transformations
+          attr_reader :extension_metadata,
+                      :metadata_transformations
         end
+
+        base.before_create :set_default_metadata
         base.instance_variable_set('@extension_metadata', {})
         base.instance_variable_set('@metadata_transformations', [])
         base.extend ClassMethods
