@@ -22,23 +22,23 @@ module Sinatra
         end
 
         app.post '/messages' do
-          halt 400, 'message parameter required' unless params.has_key?('message')
+          halt 400, json('error' => 'message parameter required') unless params.has_key?('message')
           @message = Message.new(params['message'])
           @message.from = @authenticated_user.id
           if @message.save
             message_json @message
           else
-            halt 400, 'subject is required'
+            halt 400, json('error' => 'subject is required')
           end
         end
 
         app.get '/sent' do
-          @messages = Message.sent_by_user(@authenticated_user[:id])
+          @messages = Message.sent(@authenticated_user.id)
           message_json @messages
         end
 
         app.get '/drafts' do
-          @messages = Message.by_state('draft')
+          @messages = Message.drafts(@authenticated_user.id)
           message_json @messages
         end
 
