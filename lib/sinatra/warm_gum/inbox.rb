@@ -18,7 +18,7 @@ module Sinatra
           message_json @messages
         end
 
-        app.get '/messages/archived' do
+        app.get '/archived' do
           @messages = Message.archived(@authenticated_user[:id])
           message_json @messages
         end
