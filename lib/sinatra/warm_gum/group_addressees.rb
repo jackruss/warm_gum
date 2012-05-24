@@ -35,7 +35,7 @@ module Sinatra
         app.delete %r{^/messages/(#{ID_FORMAT})/addressees/groups/(.*)/(\d+)$} do |message_id, group_type, group_addressee_id|
           halt 400, json('error' => 'Group type does not exist') unless group_type_exists?(group_type)
 
-          if can_read_group?(group_type, group_addressee_id)
+          if can_read_group?(@authenticated_user, group_type, group_addressee_id)
             @message = Message.find(message_id)
             @message.remove_group_addressee(group_type, group_addressee_id)
             message_json @message
