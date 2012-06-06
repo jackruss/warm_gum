@@ -35,6 +35,8 @@ module Sinatra
         app.put %r{^/messages/(#{ID_FORMAT})$} do |message_id|
           halt 400, json('error' => 'message parameter required') unless params.has_key?('message')
           @message = Message.find(message_id)
+          halt 403, json('error' => 'cannot update delivered messages') if @message.delivered?
+
           if @message.update_attributes(params['message'])
             message_json @message
           else
