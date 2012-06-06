@@ -32,6 +32,21 @@ module Sinatra
           end
         end
 
+        app.put %r{^/messages/(#{ID_FORMAT})$} do |message_id|
+          halt 400, json('error' => 'message parameter required') unless params.has_key?('message')
+          @message = Message.find(message_id)
+          if @message.update_attributes(params['message'])
+            message_json @message
+          else
+            halt 400, json('error' => 'there was an error updating the message')
+          end
+        end
+
+        app.get '/inbox' do
+          @messages = Message.all
+          message_json @messages
+        end
+
         app.get '/sent' do
           @messages = Message.sent(@authenticated_user.id)
           message_json @messages
