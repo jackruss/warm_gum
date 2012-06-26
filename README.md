@@ -41,17 +41,15 @@ return the JSON representation of the currently logged in user
 create a new message with the required arguments, optional arguments
 and derived values set appropriately, all metadata is stored as is.
 
-    POST /
+    POST /messages
 
 #### Required arguments
 
 * `subject`
-* `body`
-* `to`
 
 #### Optional arguments
 
-* `metadata`
+* `body`
 
 #### Derived values
 
