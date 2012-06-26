@@ -161,3 +161,26 @@ All messages where `from` matches the current user's id
           "per_page": 20,
           "message_count": 21,
         }
+
+## Filters
+
+Each defined route in warm gum shall have the following
+(callbacks|filters):
+
+* before - ex. useful to modify the query that is performed to retrieve
+  a resource
+* after - ex. useful to modify the message JSON structure as
+  authorization and business logic dictate
+
+## Extensions
+
+The following extensions allow additional functionality to be plugged
+into Warm Gum:
+
+* [Acknowledgement](https://github.com/jackruss/warm_gum/blob/master/extensions/acknowledgement.md)
+* [Group Addressees](https://github.com/jackruss/warm_gum/blob/master/extensions/group_addressees.md)
+* [Inbox](https://github.com/jackruss/warm_gum/blob/master/extensions/inbox.md)
+* [Individual User Addressees](https://github.com/jackruss/warm_gum/blob/master/extensions/individual_addressees.md)
+* [Labels](https://github.com/jackruss/warm_gum/blob/master/extensions/labels.md)
+* [Mark as Read](https://github.com/jackruss/warm_gum/blob/master/extensions/read.md)
+* [Search](https://github.com/jackruss/warm_gum/blob/master/extensions/search.md)
