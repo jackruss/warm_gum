@@ -44,11 +44,6 @@ module Sinatra
           end
         end
 
-        app.get '/inbox' do
-          @messages = Message.all
-          message_json @messages
-        end
-
         app.get '/sent' do
           @messages = Message.sent(@authenticated_user.id)
           message_json @messages
