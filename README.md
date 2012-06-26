@@ -54,16 +54,6 @@ and derived values set appropriately, all metadata is stored as is.
 #### Derived values
 
 * `from` - `current_user.id` in the session
-* `sent_at` - generated before save
-
-        {
-          "message": {
-            "subject": "stuff subject",
-            "body": "cold body",
-            "to": 1,
-            "metadata": {}
-          }
-        }
 
 #### Response
 
@@ -71,6 +61,33 @@ and derived values set appropriately, all metadata is stored as is.
   body: <blank>  
 * 200 - authorized and message was created, body: entire preprocessed JSON
 message  
+  body: entire message json object
+
+
+### Deliver a message
+
+deliver a message, i.e. set delivered_at, set state to delivered
+
+    PUT /messages/:id/deliver
+
+#### Required arguments
+
+none
+
+#### Optional arguments
+
+none
+
+#### Derived values
+
+* `delivered_at`- current time
+* `state` - 'delivered'
+
+#### Response
+
+* 403 - not authorized  
+  body: <blank>  
+* 200 - message was delivered  
   body: entire message json object
 
 ### List all messages (paginated)
@@ -103,7 +120,7 @@ None
 
 ### Retrieve a message
 
-GET `/:id`
+GET `/message/:id`
 
 #### Required arguments
 
@@ -120,8 +137,9 @@ GET `/:id`
 
 Current user must be included in one of the following:
 
-* `to`
 * `from`
+* `metadata.addressees.individuals`
+* user's groups must intersect with `metadata.addressees.groups`
 
 ### Sent messages (paginated)
 
@@ -143,13 +161,3 @@ All messages where `from` matches the current user's id
           "per_page": 20,
           "message_count": 21,
         }
-
-## Filters
-
-Each defined route in warm gum shall have the following
-(callbacks|filters):
-
-* before - ex. useful to modify the query that is performed to retrieve
-  a resource
-* after - ex. useful to modify the message JSON structure as
-  authorization and business logic dictate
