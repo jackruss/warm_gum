@@ -6,7 +6,7 @@ module Sinatra
 
       EXTENSION_METADATA = { 'participation' => { 'acknowledged' => [] } }
       METADATA_TRANSFORM = Proc.new do |message, options|
-        { 'acknowledged' => message.acknowledged?(options[:user_id]) }
+        { 'acknowledged' => message.acknowledged?(options[:user_id]), 'acknowledged_ids' => message.acknowledged_ids }
       end
 
       def self.registered(app)
@@ -30,7 +30,7 @@ module Sinatra
         end
 
         app.get '/unacknowledged' do
-          @messages = Message.unacknowledge!(@authenticated_user.id)
+          @messages = Message.unacknowledged(@authenticated_user.id)
           message_json @messages
         end
       end
