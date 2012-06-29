@@ -15,7 +15,7 @@ module Sinatra
         app.post %r{/messages/(#{ID_FORMAT})/comments} do |message_id|
           @message = Message.find(message_id)
           @comment = params['comment']
-          if @message.add_comment(@comment['user_id'], @comment['body'])
+          if @message.add_comment(@comment)
             message_json @message
           else
             halt 403, json('error' => 'Error adding comment')
