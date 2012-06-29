@@ -6,11 +6,20 @@ module Sinatra
       METADATA_TRANSFORM = Proc.new do |message, options|
         { 'group_addressees' => message.group_addressees }
       end
+      def self.register_extension_metadata
+        groups_metadata_defaults            = GROUPS.inject({}) { |result, group| result.merge!(group => []) }
+        group_individuals_metadata_defaults = GROUPS.inject({}) { |result, group| result.merge!(group => {}) }
+        extension_metadata = {
+          'addressees' => {
+            'group'             => groups_metadata_defaults,
+            'group_individuals' => group_individuals_metadata_defaults,
+          }
+        }
+        Message.register_extension_metadata(extension_metadata)
+      end
 
       def self.registered(app)
-        groups_metadata_defaults = GROUPS.inject({}) { |result, group| result.merge!(group => []) }
-        extension_metadata = { 'addressees' => { 'group' => groups_metadata_defaults } }
-        Message.register_extension_metadata(extension_metadata)
+        GroupAddressees::register_extension_metadata
 
         app.put %r{^/messages/(#{ID_FORMAT})/addressees/groups/(.*)/(\d+)$} do |message_id, group_type, group_addressee_id|
           halt 400, json('error' => 'Group type does not exist') unless group_type_exists?(group_type)
