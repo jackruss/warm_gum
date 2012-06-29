@@ -1,6 +1,7 @@
 require 'sinatra/warm_gum/version'
 require 'sinatra/warm_gum/base'
 require 'sinatra/warm_gum/acknowledgement'
+require 'sinatra/warm_gum/comments'
 require 'sinatra/warm_gum/group_addressees'
 require 'sinatra/warm_gum/inbox'
 require 'sinatra/warm_gum/individual_addressees'
