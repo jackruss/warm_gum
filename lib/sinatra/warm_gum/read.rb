@@ -25,12 +25,12 @@ module Sinatra
 
         app.get '/read' do
           @messages = Message.read(@authenticated_user.id)
-          message_json @messages
+          message_json @messages.page(params[:page]).per(PER_PAGE)
         end
 
         app.get '/unread' do
           @messages = Message.unread(@authenticated_user.id)
-          message_json @messages
+          message_json @messages.page(params[:page]).per(PER_PAGE)
         end
 
       end

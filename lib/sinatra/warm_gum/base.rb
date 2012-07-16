@@ -18,7 +18,7 @@ module Sinatra
 
         app.get '/messages' do
           @messages = Message.all_for_user(@authenticated_user.id)
-          message_json @messages
+          message_json @messages.page(params[:page]).per(PER_PAGE)
         end
 
         app.post '/messages' do
@@ -46,12 +46,12 @@ module Sinatra
 
         app.get '/sent' do
           @messages = Message.sent(@authenticated_user.id)
-          message_json @messages
+          message_json @messages.page(params[:page]).per(PER_PAGE)
         end
 
         app.get '/drafts' do
           @messages = Message.drafts(@authenticated_user.id)
-          message_json @messages
+          message_json @messages.page(params[:page]).per(PER_PAGE)
         end
 
         app.put '/messages/:id/deliver' do

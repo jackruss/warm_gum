@@ -26,12 +26,12 @@ module Sinatra
 
         app.get '/acknowledged' do
           @messages = Message.acknowledged(@authenticated_user.id)
-          message_json @messages
+          message_json @messages.page(params[:page]).per(PER_PAGE)
         end
 
         app.get '/unacknowledged' do
           @messages = Message.unacknowledged(@authenticated_user.id)
-          message_json @messages
+          message_json @messages.page(params[:page]).per(PER_PAGE)
         end
       end
     end

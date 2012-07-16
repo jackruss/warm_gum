@@ -9,10 +9,7 @@ module Sinatra
       end
 
       def self.registered(app)
-
-
         Message.register_extension_metadata(EXTENSION_METADATA)
-
       end
 
     end
