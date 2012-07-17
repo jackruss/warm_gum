@@ -11,14 +11,14 @@ module Sinatra
           json @authenticated_user.as_json
         end
 
-        app.get %r{^/messages/(#{ID_FORMAT})$} do |message_id|
+        app.get %r{^/messages/(#{app.settings.id_format})$} do |message_id|
           @message = Message.find(message_id)
           message_json @message
         end
 
         app.get '/messages' do
           @messages = Message.all_for_user(@authenticated_user.id)
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.post '/messages' do
@@ -32,7 +32,7 @@ module Sinatra
           end
         end
 
-        app.put %r{^/messages/(#{ID_FORMAT})$} do |message_id|
+        app.put %r{^/messages/(#{app.settings.id_format})$} do |message_id|
           halt 400, json('error' => 'message parameter required') unless params.has_key?('message')
           @message = Message.find(message_id)
           halt 403, json('error' => 'cannot update delivered messages') if @message.delivered?
@@ -46,12 +46,12 @@ module Sinatra
 
         app.get '/sent' do
           @messages = Message.sent(@authenticated_user.id)
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.get '/drafts' do
           @messages = Message.drafts(@authenticated_user.id)
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.put '/messages/:id/deliver' do
@@ -59,7 +59,7 @@ module Sinatra
           if @message.delivered?
             halt
           else
-            @message.deliver
+            @message.deliver!
             message_json @message
           end
         end

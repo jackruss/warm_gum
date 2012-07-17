@@ -12,7 +12,7 @@ module Sinatra
 
         Message.register_extension_metadata(EXTENSION_METADATA)
 
-        app.put %r{^/messages/(#{ID_FORMAT})/read$} do |message_id|
+        app.put %r{^/messages/(#{app.settings.id_format})/read$} do |message_id|
           @message = Message.find(message_id)
           if @message
             @message.read!(@authenticated_user.id)
@@ -25,12 +25,12 @@ module Sinatra
 
         app.get '/read' do
           @messages = Message.read(@authenticated_user.id)
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.get '/unread' do
           @messages = Message.unread(@authenticated_user.id)
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
       end

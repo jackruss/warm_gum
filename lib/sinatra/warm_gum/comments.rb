@@ -12,7 +12,7 @@ module Sinatra
 
         Message.register_extension_metadata(EXTENSION_METADATA)
 
-        app.post %r{/messages/(#{ID_FORMAT})/comments} do |message_id|
+        app.post %r{/messages/(#{app.settings.id_format})/comments} do |message_id|
           @message = Message.find(message_id)
           @comment = params['comment']
           if @message.add_comment(@comment)
@@ -22,7 +22,7 @@ module Sinatra
           end
         end
 
-        app.get %r{/messages/(#{ID_FORMAT})/comments} do |message_id|
+        app.get %r{/messages/(#{app.settings.id_format})/comments} do |message_id|
           @message = Message.find(message_id)
           if @message.comments
             json( { 'comments' => @message.comments } )

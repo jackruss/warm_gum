@@ -13,7 +13,7 @@ module Sinatra
 
         Message.register_extension_metadata(EXTENSION_METADATA)
 
-        app.put %r{^/messages/(#{ID_FORMAT})/acknowledge$} do |message_id|
+        app.put %r{^/messages/(#{app.settings.id_format})/acknowledge$} do |message_id|
           @message = Message.find(message_id)
           if @message
             @message.acknowledge!(@authenticated_user.id)
@@ -26,12 +26,12 @@ module Sinatra
 
         app.get '/acknowledged' do
           @messages = Message.acknowledged(@authenticated_user.id)
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.get '/unacknowledged' do
           @messages = Message.unacknowledged(@authenticated_user.id)
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
       end
     end

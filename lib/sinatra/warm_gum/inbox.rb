@@ -15,15 +15,15 @@ module Sinatra
 
         app.get '/inbox' do
           @messages = Message.inbox(@authenticated_user[:id])
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.get '/archived' do
           @messages = Message.archived(@authenticated_user[:id])
-          message_json @messages.page(params[:page]).per(PER_PAGE)
+          message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
-        app.put %r{^/messages/(#{ID_FORMAT})/archive$} do |message_id|
+        app.put %r{^/messages/(#{app.settings.id_format})/archive$} do |message_id|
           @message = Message.find(message_id)
           @message.archive!(@authenticated_user.id)
           message_json @message
