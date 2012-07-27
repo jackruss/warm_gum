@@ -2,7 +2,7 @@ require 'sinatra/base'
 
 module Sinatra
   module WarmGum
-    module Read
+    module LegacySystem
       EXTENSION_METADATA = { 'legacy_system' => '' }
       METADATA_TRANSFORM = Proc.new do |message, options|
         { 'legacy_system' => message.legacy_system }
