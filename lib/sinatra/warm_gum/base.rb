@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require 'sinatra/json'
 
 module Sinatra
   module WarmGum
