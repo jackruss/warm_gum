@@ -1,5 +1,3 @@
-require 'sinatra/base'
-
 module Sinatra
   module WarmGum
     module Search
@@ -8,6 +6,4 @@ module Sinatra
       end
     end
   end
-
-  register WarmGum::Search
 end

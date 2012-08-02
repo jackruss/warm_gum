@@ -1,5 +1,3 @@
-require 'sinatra/base'
-
 module Sinatra
   module WarmGum
     module Comments
@@ -13,17 +11,15 @@ module Sinatra
         Message.register_extension_metadata(EXTENSION_METADATA)
 
         app.post %r{/messages/(#{app.settings.id_format})/comments} do |message_id|
-          @message = Message.find(message_id)
           @comment = params['comment']
           if @message.add_comment(@comment)
             message_json @message
           else
-            halt 403, json('error' => 'Error adding comment')
+            halt 400, app.settings.errors[285]
           end
         end
 
         app.get %r{/messages/(#{app.settings.id_format})/comments} do |message_id|
-          @message = Message.find(message_id)
           if @message.comments
             json( { 'comments' => @message.comments } )
           else
