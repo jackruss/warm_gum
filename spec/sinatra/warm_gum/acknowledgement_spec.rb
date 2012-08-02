@@ -17,13 +17,17 @@ describe Sinatra::WarmGum::Acknowledgement do
     end
   end
 
-  class App < Sinatra::Application
+  class App < Sinatra::Base
     set :environment, :test
     set :id_format, /\d+/
     set :per_page, 10
 
     before do
       @authenticated_user = User.new
+    end
+
+    before do
+      content_type :json
     end
 
     register Sinatra::WarmGum::Acknowledgement
@@ -36,10 +40,7 @@ describe Sinatra::WarmGum::Acknowledgement do
   let(:paginator) { double('paginator', :page => double('paginator', :per => 1)) }
 
   context 'GET /acknowledged' do
-    let(:message_json) {
-      content_type :json
-      { 'messages' => [] }
-    }
+    let(:message_json) { { 'messages' => [] } }
     before do
       app.any_instance.stub(:message_json).and_return(message_json)
     end
