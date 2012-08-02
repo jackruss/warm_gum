@@ -1,5 +1,3 @@
-require 'sinatra/base'
-
 module Sinatra
   module WarmGum
     module Acknowledgement
@@ -14,14 +12,8 @@ module Sinatra
         Message.register_extension_metadata(EXTENSION_METADATA)
 
         app.put %r{^/messages/(#{app.settings.id_format})/acknowledge$} do |message_id|
-          @message = Message.find(message_id)
-          if @message
-            @message.acknowledge!(@authenticated_user.id)
-            message_json @message
-          else
-            status 404
-            body 'Message not found'
-          end
+          @message.acknowledge!(@authenticated_user.id)
+          message_json @message
         end
 
         app.get '/acknowledged' do
@@ -33,6 +25,7 @@ module Sinatra
           @messages = Message.unacknowledged(@authenticated_user.id)
           message_json @messages.page(params[:page]).per(settings.per_page)
         end
+
       end
     end
   end

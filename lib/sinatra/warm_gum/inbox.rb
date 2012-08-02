@@ -1,6 +1,3 @@
-require 'sinatra/base'
-require 'sinatra/json'
-
 module Sinatra
   module WarmGum
     module Inbox
@@ -14,17 +11,16 @@ module Sinatra
         Message.register_extension_metadata(EXTENSION_METADATA)
 
         app.get '/inbox' do
-          @messages = Message.inbox(@authenticated_user[:id])
+          @messages = Message.inbox(@authenticated_user.id)
           message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.get '/archived' do
-          @messages = Message.archived(@authenticated_user[:id])
+          @messages = Message.archived(@authenticated_user.id)
           message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
         app.put %r{^/messages/(#{app.settings.id_format})/archive$} do |message_id|
-          @message = Message.find(message_id)
           @message.archive!(@authenticated_user.id)
           message_json @message
         end

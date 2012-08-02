@@ -1,3 +1,5 @@
+require 'sinatra'
+
 require 'sinatra/warm_gum/version'
 require 'sinatra/warm_gum/base'
 require 'sinatra/warm_gum/acknowledgement'

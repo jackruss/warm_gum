@@ -1,5 +1,3 @@
-require 'sinatra/base'
-
 module Sinatra
   module WarmGum
     module Read
@@ -13,14 +11,8 @@ module Sinatra
         Message.register_extension_metadata(EXTENSION_METADATA)
 
         app.put %r{^/messages/(#{app.settings.id_format})/read$} do |message_id|
-          @message = Message.find(message_id)
-          if @message
-            @message.read!(@authenticated_user.id)
-            message_json @message
-          else
-            status 404
-            body 'Message not found'
-          end
+          @message.read!(@authenticated_user.id)
+          message_json @message
         end
 
         app.get '/read' do

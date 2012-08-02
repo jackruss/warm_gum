@@ -1,6 +1,3 @@
-require 'sinatra/base'
-require 'sinatra/json'
-
 module Sinatra
   module WarmGum
     module Base
@@ -12,7 +9,6 @@ module Sinatra
         end
 
         app.get %r{^/messages/(#{app.settings.id_format})$} do |message_id|
-          @message = Message.find(message_id)
           message_json @message
         end
 
@@ -22,25 +18,22 @@ module Sinatra
         end
 
         app.post '/messages' do
-          halt 400, json('error' => 'message parameter required') unless params.has_key?('message')
           @message = Message.new(params['message'])
           @message.from = @authenticated_user.id
           if @message.save
             message_json @message
           else
-            halt 400, json('error' => 'subject is required')
+            halt 400, settings.errors[282].to_json
           end
         end
 
         app.put %r{^/messages/(#{app.settings.id_format})$} do |message_id|
-          halt 400, json('error' => 'message parameter required') unless params.has_key?('message')
-          @message = Message.find(message_id)
-          halt 403, json('error' => 'cannot update delivered messages') if @message.delivered?
+          halt 403, settings.errors[284].to_json if @message.delivered?
 
           if @message.update_attributes(params['message'])
             message_json @message
           else
-            halt 400, json('error' => 'there was an error updating the message')
+            halt 400, settings.errors[282].to_json
           end
         end
 
@@ -54,13 +47,13 @@ module Sinatra
           message_json @messages.page(params[:page]).per(settings.per_page)
         end
 
-        app.put '/messages/:id/deliver' do
-          @message = Message.find(params[:id])
-          if @message.delivered?
-            halt
-          else
-            @message.deliver!
+        app.put %r{^/messages/(#{app.settings.id_format})/deliver$} do |message_id|
+          halt 400, settings.errors[283].to_json if @message.delivered?
+
+          if @message.deliver!
             message_json @message
+          else
+            halt 400, settings.errors[283].to_json
           end
         end
 
